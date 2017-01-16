@@ -1,0 +1,68 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const fs = require('fs');
+const program = require('commander');
+const winston = require('winston');
+const dedupe = require('dedupe');
+const pjson = require('../package.json')
+const fetchIgnores = require('../lib/fetchignores');
+const runAfter = require('../lib/runafter');
+
+program
+  .version(pjson.version)
+  .arguments('<languages...>')
+  .action(languages => {
+    // remove duplicates
+    languages = dedupe(languages);
+
+    const languagesAdded = [];
+    const languagesNotAdded = [];
+
+    // function to run when the program ends
+    const done = runAfter(languages.length, function returnResult() {
+      const added = languagesAdded.join(', ');
+      const notAdded = languagesNotAdded.join(', ');
+      const numAdded = languagesAdded.length;
+      const numNotAdded = languagesNotAdded.length;
+
+      winston.info(`${numAdded} gitignores added: ${added}`);
+      if (numNotAdded > 0) {
+        winston.warn(`${numNotAdded} gitignores not added: ${notAdded}`);
+        winston.warn('Please refer to https://github.com/github/gitignore '+
+                     'for a list of available gitignores');
+      }
+    });
+
+    // iterate through languages and add them to .gitignore
+    for (const language of languages) {
+      winston.verbose(`Adding ${language}`);
+
+      fetchIgnores(pjson.gitignoreLib, language.toLowerCase(), (err, data) => {
+        if (err) {
+          winston.error(err);
+        }
+
+        if (data) {
+          // append data to gitignore
+          fs.appendFile('.gitignore', data, (err) => {
+            if (err) {
+              winston.error(err);
+              languagesNotAdded.push(language);
+            } else {
+              winston.verbose(`${language} added!`);
+              languagesAdded.push(language);
+            }
+            done();
+          });
+        } else {
+          winston.verbose(`${language} could not be found!`);
+          languagesNotAdded.push(language);
+          done();
+        }
+
+      });
+    }
+  })
+  .parse(process.argv)

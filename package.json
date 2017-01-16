@@ -1,0 +1,36 @@
+{
+  "name": "ignoreit",
+  "version": "0.0.1",
+  "description": "Automatically git-ignore common files",
+  "main": "index.js",
+  "bin": {
+    "ignoreit": "./ignoreit"
+  },
+  "scripts": {
+    "install": "git submodule update --init",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ben-z/ignoreit.git"
+  },
+  "gitignoreLib": "vendor/gitignore",
+  "keywords": [
+    "gitignore",
+    "git",
+    "ignore",
+    "commandline",
+    "command"
+  ],
+  "author": "ben-z",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ben-z/ignoreit/issues"
+  },
+  "homepage": "https://github.com/ben-z/ignoreit#readme",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "dedupe": "^2.1.0",
+    "winston": "^2.3.0"
+  }
+}
