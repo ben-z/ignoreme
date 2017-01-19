@@ -4,7 +4,7 @@
   "description": "Automatically git-ignore common files",
   "main": "index.js",
   "bin": {
-    "ignoreme": "./ignoreme"
+    "ignoreme": "./bin/ignoreme"
   },
   "scripts": {
     "install": "git submodule update --init",
