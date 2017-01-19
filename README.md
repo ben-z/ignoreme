@@ -16,14 +16,63 @@ $ npm install -g ignoreit
 
 # Usage
 
+To add ignores:
 ```bash
 $ ignoreit add <language1, language2, editor1, ...>
 ```
 
-*Example* To ignore all `vim` and `node` temporary files:
+To remove ignores:
 
 ```bash
-$ ignoreit add vim node
+$ ignoreit remove <language1, language2, editor1, ...>
+```
+
+To list ignores:
+
+```bash
+$ ignoreit list
+```
+
+# Examples
+
+To ignore all `vim`, `node`, and `macos` temporary files:
+
+```bash
+$ ignoreit add vim node macos
+# 3 gitignore(s) added: node, vim, macos
+
+$ ignoreit list
+# 3 complete gitignore(s):
+#   |-- macos
+#   |-- node
+#   |-- vim
+```
+
+To un-ignore `node` temporary files
+
+```bash
+$ ignoreit remove node
+# 1 gitignore(s) removed: node
+
+$ ignoreit list
+# 2 complete gitignore(s):
+#   |-- macos
+#   |-- vim
+```
+
+Let's say you forgot that you have `macos` ignores...
+
+```bash
+$ ignoreit add macos
+# 1 gitignore(s) already exist(s): macos
+```
+
+...or that you misspelt `vim` (to be improved)
+
+```bash
+$ ignoreit add vym
+# 1 gitignore(s) not found: vym
+# Please refer to https://github.com/github/gitignore for a list of available gitignores
 ```
 
 # Todo
@@ -31,9 +80,12 @@ $ ignoreit add vim node
 This project is still WIP. Major things left to do:
 
 - [x] `ignoreit add`
-- [ ] `ignoreit remove`
-- [ ] avoid duplicate adds (recognize existing ignored files)
+- [x] `ignoreit remove`
+- [x] `ignoreit list`
+- [x] avoid duplicate adds (recognize existing ignored files)
 - [ ] tests
+- [ ] a better UI (with colours and all that)
+- [ ] automatically suggest possible typo fixes
 
 # Contributing
 
