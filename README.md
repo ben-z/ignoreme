@@ -1,6 +1,6 @@
 # IgnoreIt
 
-Automatically ignore files for you.
+If you are like me, you'd do lots and lots of small projects to learn just about anything. Lots of projects means lots of boilerplates, and out of all the boilerplates, the one we have to create the most often is more or less the `.gitignore` file. IgnoreIt makes the process of maintaining `.gitignore` files a breeze.
 
 # Installation
 
