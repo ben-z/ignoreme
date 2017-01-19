@@ -82,7 +82,7 @@ This project is still WIP. Major things left to do:
 - [x] `ignoreit list`
 - [x] avoid duplicate adds (recognize existing ignored files)
 - [ ] tests
-- [ ] a better UI (with colours and all that)
+- [ ] a better UI (with colours and everything)
 - [ ] automatically suggest possible typo fixes
 
 # Contributing
