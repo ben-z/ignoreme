@@ -1,17 +1,15 @@
 # IgnoreIt
 
-If you are like me, you'd do lots and lots of small projects to learn just about anything. Lots of projects means lots of boilerplates, and out of all the boilerplates, the one we have to create the most often is more or less the `.gitignore` file. IgnoreIt makes the process of maintaining `.gitignore` files a breeze.
+If you are like me, you'd do lots and lots of small projects to learn just about anything. Lots of projects means lots of boilerplates, and out of all the boilerplates, the one we have to create the most often is more or less the `.gitignore` file.
 
-# Installation
+IgnoreIt makes the process of maintaining `.gitignore` files quick and easy.
 
-```bash
-$ yarn global add ignoreit
-```
-
-or if you like the good ol' npm
+# Get Started
 
 ```bash
-$ npm install -g ignoreit
+$ yarn global add ignoreit # or npm i -g ignoreit
+$ ignoreit vim node macos
+# 3 gitignore(s) added: vim, node, macos
 ```
 
 # Usage
@@ -39,7 +37,7 @@ To ignore all `vim`, `node`, and `macos` temporary files:
 
 ```bash
 $ ignoreit add vim node macos
-# 3 gitignore(s) added: node, vim, macos
+# 3 gitignore(s) added: vim, node, macos
 
 $ ignoreit list
 # 3 complete gitignore(s):
