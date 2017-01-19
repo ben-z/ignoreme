@@ -10,6 +10,14 @@ const pjson = require('../package.json')
 const fetchIgnores = require('../lib/fetchignores');
 const runAfter = require('../lib/runafter');
 
+function beginLanguageSeparator(language) {
+  return `### begin ignoreit ${language} ###`;
+}
+
+function endLanguageSeparator(language) {
+  return `### end ignoreit ${language} ###`;
+}
+
 program
   .version(pjson.version)
   .arguments('<languages...>')
@@ -18,16 +26,24 @@ program
     languages = dedupe(languages);
 
     const languagesAdded = [];
-    const languagesNotAdded = [];
+    const languagesAlreadyExist = [];
+    const languagesNotFound = [];
 
     // function to run when the program ends
     const done = runAfter(languages.length, function returnResult() {
       const added = languagesAdded.join(', ');
-      const notAdded = languagesNotAdded.join(', ');
+      const notAdded = languagesNotFound.join(', ');
+      const alreadyExist = languagesAlreadyExist.join(', ')
       const numAdded = languagesAdded.length;
-      const numNotAdded = languagesNotAdded.length;
+      const numNotAdded = languagesNotFound.length;
+      const numAlreadyExist = languagesAlreadyExist.length;
 
-      winston.info(`${numAdded} gitignores added: ${added}`);
+      if (numAdded > 0) {
+        winston.info(`${numAdded} gitignores added: ${added}`);
+      }
+      if (numAlreadyExist > 0) {
+        winston.info(`${numAlreadyExist} gitignores already exist: ${alreadyExist}`);
+      }
       if (numNotAdded > 0) {
         winston.warn(`${numNotAdded} gitignores not added: ${notAdded}`);
         winston.warn('Please refer to https://github.com/github/gitignore '+
@@ -36,32 +52,48 @@ program
     });
 
     // iterate through languages and add them to .gitignore
-    for (const language of languages) {
-      winston.verbose(`Adding ${language}`);
+    for (let language of languages) {
+      winston.verbose(`Attempting to add ${language}`);
 
-      fetchIgnores(pjson.gitignoreLib, language.toLowerCase(), (err, data) => {
+      language = language.toLowerCase();
+      const begSep = beginLanguageSeparator(language);
+      const endSep = endLanguageSeparator(language);
+
+      fs.readFile('.gitignore', (err, ignoreFile) => {
         if (err) {
           winston.error(err);
+          process.exit(1);
         }
 
-        if (data) {
-          // append data to gitignore
-          fs.appendFile('.gitignore', data, (err) => {
+        if (~ignoreFile.indexOf(begSep) && ~ignoreFile.indexOf(endSep)) {
+          languagesAlreadyExist.push(language);
+          done();
+        } else {
+          fetchIgnores(pjson.gitignoreLib, language, (err, data) => {
             if (err) {
               winston.error(err);
-              languagesNotAdded.push(language);
-            } else {
-              winston.verbose(`${language} added!`);
-              languagesAdded.push(language);
             }
-            done();
-          });
-        } else {
-          winston.verbose(`${language} could not be found!`);
-          languagesNotAdded.push(language);
-          done();
-        }
 
+            if (data) {
+              data = `${begSep}\n${data}\n${endSep}`;
+              // append data to gitignore
+              fs.appendFile('.gitignore', data, (err) => {
+                if (err) {
+                  winston.error(err);
+                  languagesNotFound.push(language);
+                } else {
+                  winston.verbose(`${language} added!`);
+                  languagesAdded.push(language);
+                }
+                done();
+              });
+            } else {
+              winston.verbose(`${language} could not be found!`);
+              languagesNotFound.push(language);
+              done();
+            }
+          });
+        }
       });
     }
   })
