@@ -1,6 +1,6 @@
 {
   "name": "ignoreme",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Automatically git-ignore common files",
   "main": "index.js",
   "bin": {
