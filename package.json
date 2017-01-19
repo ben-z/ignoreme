@@ -2,12 +2,12 @@
   "name": "ignoreme",
   "version": "0.0.3",
   "description": "Automatically git-ignore common files",
-  "main": "index.js",
+  "main": "bin/ignoreme",
   "bin": {
-    "ignoreme": "./bin/ignoreme"
+    "ignoreme": "bin/ignoreme"
   },
   "scripts": {
-    "install": "git submodule update --init",
+    "postinstall": "git submodule update --init",
     "test": "mocha"
   },
   "repository": {
