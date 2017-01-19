@@ -1,4 +1,4 @@
-### begin ignoreit vim ###
+### begin ignoreme vim ###
 # swap
 [._]*.s[a-v][a-z]
 [._]*.sw[a-p]
@@ -12,8 +12,8 @@ Session.vim
 # auto-generated tag files
 tags
 
-### end ignoreit vim ###
-### begin ignoreit node ###
+### end ignoreme vim ###
+### begin ignoreme node ###
 # Logs
 logs
 *.log
@@ -63,8 +63,8 @@ jspm_packages
 .yarn-integrity
 
 
-### end ignoreit node ###
-### begin ignoreit macos ###
+### end ignoreme node ###
+### begin ignoreme macos ###
 *.DS_Store
 .AppleDouble
 .LSOverride
@@ -92,4 +92,4 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-### end ignoreit macos ###
+### end ignoreme macos ###

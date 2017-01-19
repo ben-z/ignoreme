@@ -9,5 +9,5 @@ program
   .version(pjson.version)
   .command('add <language...>', 'add languages to .gitignore')
   .command('remove <language...>', 'remove languages from .gitignore')
-  .command('list', 'list languages in .gitignore that are managed by ignoreit')
+  .command('list', 'list languages in .gitignore that are managed by ignoreme')
   .parse(process.argv)
