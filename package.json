@@ -31,7 +31,6 @@
   "dependencies": {
     "commander": "^2.9.0",
     "dedupe": "^2.1.0",
-    "lockfile": "^1.0.3",
     "winston": "^2.3.0"
   },
   "devDependencies": {

@@ -22,12 +22,14 @@ fs.readFile('.gitignore', (err, ignoreFile) => {
   const beginRegex = beginLanguageSeparator('(.*)');
   const endRegex = endLanguageSeparator('(.*)');
 
-  const matchedBegLanguages = ignoreFile.match(new RegExp(beginRegex, 'g')).map((line) => {
+  const matchedBegLines = ignoreFile.match(new RegExp(beginRegex, 'g')) || [];
+  const matchedBegLanguages = matchedBegLines.map((line) => {
     // returns the first capture group
     return line.match(new RegExp(beginRegex))[1];
   }).sort();
 
-  const matchedEndLanguages = ignoreFile.match(new RegExp(endRegex, 'g')).map((line) => {
+  const matchedEndLines = ignoreFile.match(new RegExp(endRegex, 'g')) || [];
+  const matchedEndLanguages = matchedEndLines.map((line) => {
     // returns the first capture group
     return line.match(new RegExp(endRegex))[1];
   }).sort();
@@ -40,6 +42,9 @@ fs.readFile('.gitignore', (err, ignoreFile) => {
     completeLanguages.forEach((language) => {
       winston.info(`  |-- ${language}`);
     });
+  } else {
+    winston.info('No complete gitignores are currently managed by IgnoreMe.');
+    winston.info('Try adding one: `ignoreme add node`');
   }
   if (incompleteLanguages.length > 0) {
     winston.info(`${incompleteLanguages.length} incomplete gitignore(s): `);
