@@ -9,14 +9,10 @@ const dedupe = require('dedupe');
 const pjson = require('../package.json')
 const fetchIgnores = require('../lib/fetchignores');
 const runAfter = require('../lib/runafter');
-
-function beginLanguageSeparator(language) {
-  return `### begin ignoreit ${language} ###`;
-}
-
-function endLanguageSeparator(language) {
-  return `### end ignoreit ${language} ###`;
-}
+const {
+  beginLanguageSeparator,
+  endLanguageSeparator
+} = require('../lib/separators');
 
 program
   .version(pjson.version)
@@ -32,20 +28,20 @@ program
     // function to run when the program ends
     const done = runAfter(languages.length, function returnResult() {
       const added = languagesAdded.join(', ');
-      const notAdded = languagesNotFound.join(', ');
+      const notFound = languagesNotFound.join(', ');
       const alreadyExist = languagesAlreadyExist.join(', ')
       const numAdded = languagesAdded.length;
-      const numNotAdded = languagesNotFound.length;
+      const numNotFound = languagesNotFound.length;
       const numAlreadyExist = languagesAlreadyExist.length;
 
       if (numAdded > 0) {
-        winston.info(`${numAdded} gitignores added: ${added}`);
+        winston.info(`${numAdded} gitignore(s) added: ${added}`);
       }
       if (numAlreadyExist > 0) {
-        winston.info(`${numAlreadyExist} gitignores already exist: ${alreadyExist}`);
+        winston.info(`${numAlreadyExist} gitignore(s) already exist(s): ${alreadyExist}`);
       }
-      if (numNotAdded > 0) {
-        winston.warn(`${numNotAdded} gitignores not added: ${notAdded}`);
+      if (numNotFound > 0) {
+        winston.warn(`${numNotFound} gitignore(s) not found: ${notFound}`);
         winston.warn('Please refer to https://github.com/github/gitignore '+
                      'for a list of available gitignores');
       }
@@ -75,7 +71,7 @@ program
             }
 
             if (data) {
-              data = `${begSep}\n${data}\n${endSep}`;
+              data = `${begSep}\n${data}\n${endSep}\n`;
               // append data to gitignore
               fs.appendFile('.gitignore', data, (err) => {
                 if (err) {

@@ -1,0 +1,50 @@
+#!/usr/bin/env node
+
+'use strict';
+
+const fs = require('fs');
+const winston = require('winston');
+const pjson = require('../package.json')
+const {
+  beginLanguageSeparator,
+  endLanguageSeparator
+} = require('../lib/separators');
+const {intersection, difference} = require('../lib/setops');
+
+fs.readFile('.gitignore', (err, ignoreFile) => {
+  if (err) {
+    winston.error(err);
+    process.exit(1);
+  }
+
+  ignoreFile = ignoreFile.toString();
+
+  const beginRegex = beginLanguageSeparator('(.*)');
+  const endRegex = endLanguageSeparator('(.*)');
+
+  const matchedBegLanguages = ignoreFile.match(new RegExp(beginRegex, 'g')).map((line) => {
+    // returns the first capture group
+    return line.match(new RegExp(beginRegex))[1];
+  }).sort();
+
+  const matchedEndLanguages = ignoreFile.match(new RegExp(endRegex, 'g')).map((line) => {
+    // returns the first capture group
+    return line.match(new RegExp(endRegex))[1];
+  }).sort();
+
+  const completeLanguages = intersection(matchedBegLanguages, matchedEndLanguages);
+  const incompleteLanguages = difference(matchedBegLanguages, matchedEndLanguages);
+
+  if (completeLanguages.length > 0) {
+    winston.info(`${completeLanguages.length} complete gitignore(s): `);
+    completeLanguages.forEach((language) => {
+      winston.info(`|-- ${language}`);
+    });
+  }
+  if (incompleteLanguages.length > 0) {
+    winston.info(`${incompleteLanguages.length} incomplete gitignore(s): `);
+    incompleteLanguages.forEach((language) => {
+      winston.info(`|-- ${language}`);
+    });
+  }
+});
