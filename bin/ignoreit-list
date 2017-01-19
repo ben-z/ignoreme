@@ -38,13 +38,13 @@ fs.readFile('.gitignore', (err, ignoreFile) => {
   if (completeLanguages.length > 0) {
     winston.info(`${completeLanguages.length} complete gitignore(s): `);
     completeLanguages.forEach((language) => {
-      winston.info(`|-- ${language}`);
+      winston.info(`  |-- ${language}`);
     });
   }
   if (incompleteLanguages.length > 0) {
     winston.info(`${incompleteLanguages.length} incomplete gitignore(s): `);
     incompleteLanguages.forEach((language) => {
-      winston.info(`|-- ${language}`);
+      winston.info(`  |-- ${language}`);
     });
   }
 });
