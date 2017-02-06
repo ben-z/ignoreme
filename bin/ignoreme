@@ -2,7 +2,7 @@
 
 'use strict';
 
-const pjson = require('../package.json')
+const pjson = require('../package.json');
 const program = require('commander');
 
 program
@@ -10,4 +10,4 @@ program
   .command('add <language...>', 'add languages to .gitignore')
   .command('remove <language...>', 'remove languages from .gitignore')
   .command('list', 'list languages in .gitignore that are managed by ignoreme')
-  .parse(process.argv)
+  .parse(process.argv);

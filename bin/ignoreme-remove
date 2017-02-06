@@ -6,27 +6,21 @@ const fs = require('fs');
 const program = require('commander');
 const dedupe = require('dedupe');
 const winston = require('winston');
-const pjson = require('../package.json')
-const runAfter = require('../lib/runafter');
+const pjson = require('../package.json');
 const {
   beginLanguageSeparator,
-  endLanguageSeparator
+  endLanguageSeparator,
 } = require('../lib/separators');
 
 program
   .version(pjson.version)
   .arguments('<languages...>')
-  .action(languages => {
+  .action((languages) => {
     // remove duplicates
     languages = dedupe(languages);
 
     const languagesRemoved = [];
     const languagesNotFound = [];
-
-    // function to run when the program ends
-    const done = runAfter(languages.length, function returnResult() {
-      
-    });
 
     fs.readFile('.gitignore', (err, ignoreFile) => {
       if (err) {
@@ -49,9 +43,8 @@ program
         if (~begSepIndex && ~endSepIndex) {
           ignoreFile = (ignoreFile.slice(0, begSepIndex)
                         + ignoreFile.slice(endSepIndex + endSep.length))
-                       .replace(/(?:\r\n|\r|\n){3,}/g, "\n\n");
+                       .replace(/(?:\r\n|\r|\n){3,}/g, '\n\n');
           languagesRemoved.push(language);
-          
         } else {
           languagesNotFound.push(language);
         }
@@ -73,8 +66,9 @@ program
         winston.info(`${numRemoved} gitignore(s) removed: ${removed}`);
       }
       if (numNotFound > 0) {
-        winston.warn(`${numNotFound} gitignore(s) not found in .gitignore: ${notFound}`);
+        winston.warn(`${numNotFound} gitignore(s) not found`+
+                     `in .gitignore: ${notFound}`);
       }
     });
   })
-  .parse(process.argv)
+  .parse(process.argv);

@@ -6,18 +6,18 @@ const fs = require('fs');
 const program = require('commander');
 const winston = require('winston');
 const dedupe = require('dedupe');
-const pjson = require('../package.json')
+const pjson = require('../package.json');
 const fetchIgnores = require('../lib/fetchignores');
 const runAfter = require('../lib/runafter');
 const {
   beginLanguageSeparator,
-  endLanguageSeparator
+  endLanguageSeparator,
 } = require('../lib/separators');
 
 program
   .version(pjson.version)
   .arguments('<languages...>')
-  .action(languages => {
+  .action((languages) => {
     // remove duplicates
     languages = dedupe(languages);
 
@@ -29,7 +29,7 @@ program
     const done = runAfter(languages.length, function returnResult() {
       const added = languagesAdded.join(', ');
       const notFound = languagesNotFound.join(', ');
-      const alreadyExist = languagesAlreadyExist.join(', ')
+      const alreadyExist = languagesAlreadyExist.join(', ');
       const numAdded = languagesAdded.length;
       const numNotFound = languagesNotFound.length;
       const numAlreadyExist = languagesAlreadyExist.length;
@@ -38,7 +38,8 @@ program
         winston.info(`${numAdded} gitignore(s) added: ${added}`);
       }
       if (numAlreadyExist > 0) {
-        winston.info(`${numAlreadyExist} gitignore(s) already exist(s): ${alreadyExist}`);
+        winston.info(`${numAlreadyExist} gitignore(s)`+
+                     `already exist(s): ${alreadyExist}`);
       }
       if (numNotFound > 0) {
         winston.warn(`${numNotFound} gitignore(s) not found: ${notFound}`);
@@ -93,4 +94,4 @@ program
       });
     }
   })
-  .parse(process.argv)
+  .parse(process.argv);

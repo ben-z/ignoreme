@@ -4,10 +4,9 @@
 
 const fs = require('fs');
 const winston = require('winston');
-const pjson = require('../package.json')
 const {
   beginLanguageSeparator,
-  endLanguageSeparator
+  endLanguageSeparator,
 } = require('../lib/separators');
 const {intersection, difference} = require('../lib/setops');
 
@@ -34,8 +33,10 @@ fs.readFile('.gitignore', (err, ignoreFile) => {
     return line.match(new RegExp(endRegex))[1];
   }).sort();
 
-  const completeLanguages = intersection(matchedBegLanguages, matchedEndLanguages);
-  const incompleteLanguages = difference(matchedBegLanguages, matchedEndLanguages);
+  const completeLanguages = intersection(matchedBegLanguages,
+                                         matchedEndLanguages);
+  const incompleteLanguages = difference(matchedBegLanguages,
+                                         matchedEndLanguages);
 
   if (completeLanguages.length > 0) {
     winston.info(`${completeLanguages.length} complete gitignore(s): `);
