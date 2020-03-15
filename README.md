@@ -1,3 +1,18 @@
+This repo is archived. I use [gitignore.io](https://docs.gitignore.io/install/command-line) now:
+
+Setup:
+```
+echo "function gi() { curl -sL https://www.gitignore.io/api/\$@ ;}" >> \
+~/.bash_profile && source ~/.bash_profile
+```
+
+Usage:
+```
+gi node >> .gitignore
+```
+
+Below is the original Readme.
+
 # IgnoreMe
 
 If you are like me, you'd do lots and lots of small projects to learn just about anything. Lots of projects means lots of boilerplates, and out of all the boilerplates, the one we have to create the most often is more or less the `.gitignore` file.
